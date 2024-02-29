@@ -61,8 +61,12 @@ char *ft_get_line(char *buffer, int *i)
         j++;
     }
     if (ft_strchr(buffer, '\n'))
+    {
         line[j] = buffer[j];
-    line[++(*i)] = '\0';
+        line[++(*i)] = '\0';
+    }
+    else
+        line[j] = '\0';
     return (line);
 }
 
@@ -100,20 +104,22 @@ char *get_next_line(int fd)
 
 
 
-// int main()
-// {
-//     char *str;
-//     int fd = open("text.txt", O_RDONLY);
-// //    char *buffer;
-//     int i = 0;
-//     while(i < 12)
-//     {
-//         str = get_next_line(fd);
-//         // if(!str)
-//         //     break;
-//         printf("line : %s\n-------------------------------\n\n", str);
-//         free(str);
-//         i++;
-//         system("leaks a.out");
-//     }
-// }
+int main()
+{
+    char *str;
+    int fd = open("text.txt", O_RDONLY);
+//    char *buffer;
+    int i = 0;
+    // while(i < 12)
+    // {
+    //     str = get_next_line(fd);
+    //     // if(!str)
+    //     //     break;
+    //     printf("line : %s\n-------------------------------\n\n", str);
+    //     free(str);
+    //     i++;
+    //     system("leaks a.out");
+    // }
+    printf("%s\n",get_next_line(fd));
+    printf("%s\n",get_next_line(fd));
+}
