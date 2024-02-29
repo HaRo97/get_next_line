@@ -10,12 +10,12 @@
 
 size_t	ft_strlen(const char *s);
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
-char	*ft_strdup(const char *s1);
+char	*ft_strdup(char *s1);
 size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
-char	*ft_strjoin(const char *s1, const char *s2);
+char	*ft_strjoin(char *s1, char *s2);
 int ft_strchr(const char *s, int c);
 char    *fill_buffer(int fd, char *buffer);
-char *get_line(char *buffer, int *i);
+char *ft_get_line(char *buffer, int *i);
 char *get_next_line(int fd);
 
 

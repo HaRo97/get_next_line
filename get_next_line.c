@@ -18,40 +18,50 @@ char    *fill_buffer(int fd, char *buffer)
     while (found_endline == 0)
     {
         if ((bytes_read = read(fd, stash, BUFFER_SIZE)) == -1)
-            return ((void)(free(stash)), NULL);
+        {
+            free(stash);
+            return (NULL);
+        }
         else
         {
-            buffer = ft_strjoin(buffer, stash);
-            if (ft_strchr(stash, '\n'))
-                found_endline = 1;
-            else if (bytes_read < BUFFER_SIZE)
+            if (bytes_read < BUFFER_SIZE)
             {
                 free(stash);
                 break;
             }
+            else
+            {
+                stash[bytes_read] = '\0';
+                buffer = ft_strjoin(buffer, stash);
+                if (ft_strchr(stash, '\n'))
+                {
+                    found_endline = 1;
+                    free(stash);
+                }
+            }
         }
     }
-    free(stash);
+    // free(stash);
     return (buffer);
 }
 
-char *get_line(char *buffer, int *i)
+char *ft_get_line(char *buffer, int *i)
 {
-    // int i = 0;
+    int j = 0;
     char *line;
 
-    while(buffer[*i] != '\n')
+    while(buffer[*i] != '\n' && buffer[*i] != '\0')
         (*i)++;
     line = malloc(*i + 1);
     if (!line)
         return NULL;
-    *i = 0;
-    while (buffer[*i] != '\n')
+    while (j < *i)
     {
-        line[*i] = buffer[*i];
-        (*i)++;
+        line[j] = buffer[j];
+        j++;
     }
-    line[*i] = buffer[*i];
+    if (ft_strchr(buffer, '\n'))
+        line[j] = buffer[j];
     line[++(*i)] = '\0';
     return (line);
 }
@@ -75,34 +85,35 @@ char *get_next_line(int fd)
 
     // Copy bytes untill '\n' from buffer to line 
     i = 0;
-    line = get_line(buffer, &i);
-
+    line = ft_get_line(buffer, &i);
+    
     // Clean buffer and take bytes after '\n', if there are, in the beginning of buffer.
     j = 0;
     while (buffer[i])
         buffer[j++] = buffer[i++];
     buffer[j] = '\0';
 
-    printf("buffer : %s\n\n", buffer);
+    // printf("buffer : %s\n\n", buffer);
 
     return (line);
 }
 
 
 
-int main()
-{
-//    char *str;
-    int fd = open("text.txt", O_RDONLY);
-//    char *buffer;
-    int i = 0;
-    while(i < 12)
-    {
-        // str = get_next_line(fd);
-        // if(!str)
-        //     break;
-        printf("line : %s\n-------------------------------\n\n", get_next_line(fd));
-        // free(str);
-        i++;
-    }
-}
+// int main()
+// {
+//     char *str;
+//     int fd = open("text.txt", O_RDONLY);
+// //    char *buffer;
+//     int i = 0;
+//     while(i < 12)
+//     {
+//         str = get_next_line(fd);
+//         // if(!str)
+//         //     break;
+//         printf("line : %s\n-------------------------------\n\n", str);
+//         free(str);
+//         i++;
+//         system("leaks a.out");
+//     }
+// }

@@ -31,19 +31,17 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 }
 
 
-char	*ft_strdup(const char *s1)
+char	*ft_strdup(char *s1)
 {
-	size_t	i;
 	size_t	slen;
 	char	*s2;
 
-	i = 0;
 	slen = ft_strlen(s1) + 1;
 	s2 = malloc(slen * sizeof(char));
 	if (!s2)
 		return (NULL);
 	ft_strlcpy(s2, s1, slen);
-	free(s1);
+	// free(s1);
 	return (s2);
 }
 
@@ -63,7 +61,7 @@ size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 	return (dlen + slen);
 }
 
-char	*ft_strjoin(const char *s1, const char *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
 	size_t	i;
 	size_t	j;
@@ -83,6 +81,7 @@ char	*ft_strjoin(const char *s1, const char *s2)
 	ft_strlcpy(p, s1, (i + 1));
 	ft_strlcat(p, s2, (i + j + 1));
 	free(s1);
+	// free(s2);
 	return (p);
 }
 
