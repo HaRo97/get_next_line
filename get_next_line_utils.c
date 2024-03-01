@@ -67,20 +67,23 @@ char	*ft_strjoin(char *s1, char *s2)
 	size_t	j;
 	char	*p;
 
+	p = NULL;
 	if (s1 == NULL && s2 == NULL)
 		return (NULL);
 	if (s1 == NULL && s2)
-		return (ft_strdup(s2));
+		// return (ft_strdup(s2));
+		return (s2);
 	if (s2 == NULL && s1)
-		return (ft_strdup(s1));
+		// return (ft_strdup(s1));
+		return (s1);
 	i = ft_strlen(s1);
 	j = ft_strlen(s2);
-	p = malloc((i + j + 1) * sizeof(char));
-	if (!p)
-		return (NULL);
+	// p = malloc((i + j + 1) * sizeof(char));
+	// if (!p)
+	// 	return (NULL);
 	ft_strlcpy(p, s1, (i + 1));
 	ft_strlcat(p, s2, (i + j + 1));
-	free(s1);
+	// free(s1);
 	// free(s2);
 	return (p);
 }

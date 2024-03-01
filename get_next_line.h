@@ -15,7 +15,7 @@ size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
 char	*ft_strjoin(char *s1, char *s2);
 int ft_strchr(const char *s, int c);
 char    *fill_buffer(int fd, char *buffer);
-char *ft_get_line(char *buffer, int *i);
+char *ft_get_line(char *buffer, size_t *i);
 char *get_next_line(int fd);
 
 
