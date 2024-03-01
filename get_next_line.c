@@ -111,21 +111,21 @@ char *get_next_line(int fd)
 
 
 
-int main()
-{
-    char *str;
-    int fd = open("text.txt", O_RDONLY);
-//    char *buffer;
-    int i = 0;
-    while(i < 12)
-    {
-        str = get_next_line(fd);
-        // if(!str)
-        //     break;
-        printf("line : %s\n\n--------------------------------------------------------------------------------------------------------------------------\n\n", str);
-        // free(str);
-        i++;
-        system("leaks a.out");
-    }
-    // printf("%s\n",get_next_line(fd));
-}
+// int main()
+// {
+//     char *str;
+//     int fd = open("text.txt", O_RDONLY);
+// //    char *buffer;
+//     int i = 0;
+//     while(i < 12)
+//     {
+//         str = get_next_line(fd);
+//         if(!str)
+//             break;
+//         printf("line : %s\n\n--------------------------------------------------------------------------------------------------------------------------\n\n", str);
+//         free(str);
+//         i++;
+//     }
+//         system("leaks a.out");
+//     // printf("%s\n",get_next_line(fd));
+// }
