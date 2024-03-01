@@ -123,9 +123,9 @@ int main()
         // if(!str)
         //     break;
         printf("line : %s\n\n--------------------------------------------------------------------------------------------------------------------------\n\n", str);
-        free(str);
+        // free(str);
         i++;
-        
+        system("leaks a.out");
     }
     // printf("%s\n",get_next_line(fd));
 }
