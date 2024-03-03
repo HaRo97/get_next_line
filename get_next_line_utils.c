@@ -3,7 +3,8 @@
 size_t	ft_strlen(const char *s)
 {
 	size_t	i;
-
+	if (s == NULL)
+		return (-1);
 	i = 0;
 	while (s[i])
 		i++;
@@ -37,6 +38,8 @@ char	*ft_strdup(char *s1)
 	char	*s2;
 
 	slen = ft_strlen(s1) + 1;
+	if(slen==1)
+		return (NULL);
 	s2 = malloc(slen * sizeof(char));
 	if (!s2)
 		return (NULL);
@@ -75,9 +78,10 @@ char	*ft_strjoin(char *s1, char *s2)
 		return (ft_strdup(s1));
 	i = ft_strlen(s1);
 	j = ft_strlen(s2);
-		p = malloc((i + j + 1) * sizeof(char));
-//	// if(i==0 && j==0)
-//	// free(p);
+	if(i==0 && j==0)
+		return (NULL);
+	p = malloc((i + j + 1) * sizeof(char));
+		// free(p);
 	if (!p)
 		return (NULL);
 	ft_strlcpy(p, s1, (i + 1));
