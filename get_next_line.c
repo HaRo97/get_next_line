@@ -4,12 +4,10 @@
 
 char    *fill_buffer(int fd, char *buffer)
 {
-    // Read buff_size byts from fd to stash
     int found_endline;
     int found_EOF;
     long bytes_read = 0;
     char *stash;
-    // size_t j;
 
     found_endline = 0;
     found_EOF = 0;
@@ -20,33 +18,23 @@ char    *fill_buffer(int fd, char *buffer)
     {
         if ((bytes_read = read(fd, stash, BUFFER_SIZE)) == -1)
         {
-            // printf("\n------- read failed -------\n\n");
             free(stash);
             free(buffer);
             return (NULL);
         }
         else if(bytes_read == 0)
-        {
-//            // printf("\n------- 0 bytes read -------\n\n");
-            // free(stash);
-            // free(buffer);
-            // return (NULL);
             break;
-        }
         else
         {
             if (bytes_read < BUFFER_SIZE)
                 found_EOF = 1;
             stash[bytes_read] = '\0';
-            // printf("\n-------stash : %s\n\n", stash);
             buffer = ft_strjoin(buffer, stash);
             if (ft_strchr(stash, '\n'))
                 found_endline = 1;
         }
     }
-//    printf("bytes read : %ld\n", bytes_read);
     free(stash);
-    // printf("buffer : %s\n\n", buffer);
     return (buffer);
 }
 
@@ -66,8 +54,6 @@ char *ft_get_line(char *buffer, size_t *i)
     {
         line[j] = buffer[j];
         j++;
-        // if(buffer[j] == "\0")
-        //     free(buffer);
     }
         line[j] = '\0';
     return (line);
@@ -76,31 +62,22 @@ char *ft_get_line(char *buffer, size_t *i)
 char *get_next_line(int fd)
 {
     static char *buffer; 
-    char *buff;
     char *line;
     size_t i;
     size_t j;
     size_t k;
 
-    // Return NULL if there is nothing else to read or an error occured.
     if(fd < 0 || BUFFER_SIZE <= 0 || read(fd, &line, 0) < 0)
         return (NULL);
-    // If there is no '\n' in the buffer --> Read from the fd, BUFFER_SIZE bytes and strjoin them in buffer. Stop after you find '\n'.
-    buff = NULL;
-    buff = fill_buffer(fd, buffer);
-    if(buff == NULL)
+    buffer = fill_buffer(fd, buffer);
+    if(buffer == NULL)
+    {
+        free(buffer);
         return (NULL);
-
-    k = ft_strlen(buff);
-    
-    ft_strlcpy(buffer, buff, k);
-    // free(buff);
-
-    // Copy bytes untill '\n' from buffer to line 
-    i = 0;
-    line = ft_get_line(buffer, &i);
-//    printf("i : %zu\n", i);
-    // Clean buffer and take bytes after '\n', if there are, in the beginning of buffer.
+    }
+    k = ft_strlen(buffer);
+        i = 0;
+        line = ft_get_line(buffer, &i);
     j = 0;
     if(i < k)
     {
@@ -113,9 +90,6 @@ char *get_next_line(int fd)
         free(line);
         return (NULL);
     }
-    // if(k == 0)
-    //     free(buffer);
-    // printf("buffer : %s\n\n", buffer);
     return (line);
 }
 
@@ -129,30 +103,6 @@ char *get_next_line(int fd)
 //     int i = 0;
 //     // while(i < 12)
 //     // {
-//         str = get_next_line(fd);
-//         free(str);
-//          str = get_next_line(fd);
-//         free(str);
-//          str = get_next_line(fd);
-//         free(str);
-//          str = get_next_line(fd);
-//         free(str);
-//          str = get_next_line(fd);
-//         free(str);
-//          str = get_next_line(fd);
-//         free(str);
-//          str = get_next_line(fd);
-//         free(str);
-//          str = get_next_line(fd);
-//         free(str);
-//          str = get_next_line(fd);
-//         free(str);
-//          str = get_next_line(fd);
-//         free(str);
-//          str = get_next_line(fd);
-//         free(str);
-//          str = get_next_line(fd);
-//         free(str);
 //     //     // if(!str)
 //     //     //     break;
 //     //     printf("line : %s\n\n------------------------------------------------------\n\n", str);
