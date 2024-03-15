@@ -1,114 +1,177 @@
 #include "get_next_line.h"
 
-
-
-char    *fill_buffer(int fd, char *buffer)
+char *fill_stash(int fd, int *read_failed)
 {
-    int found_endline;
-    int found_EOF;
-    long bytes_read = 0;
+    char *buffer;
     char *stash;
+    int bytes_read;
+    int found_endline;
 
+    stash = NULL;
     found_endline = 0;
-    found_EOF = 0;
-    stash = malloc(BUFFER_SIZE + 1);
-    if (!stash)
-        return (NULL);
-    while (found_endline == 0 && found_EOF == 0)
+    bytes_read = 1;
+    while(found_endline == 0 && bytes_read > 0)
     {
-        if ((bytes_read = read(fd, stash, BUFFER_SIZE)) == -1)
+        buffer = malloc(BUFFER_SIZE + 1);
+        if (!buffer)
+            return (free(stash), stash = NULL, *read_failed = 1, NULL);
+        bytes_read = read(fd, buffer, BUFFER_SIZE);
+        if(bytes_read <= 0)
+        {
+            free(buffer);
+            break;
+        }
+        buffer[bytes_read] = '\0';
+        if(ft_strchr(buffer, '\n'))
+            found_endline = 1;
+        stash = ft_strjoin(&stash, buffer);
+        free(buffer);
+    }
+    if (bytes_read == 0)
+    {
+        if (stash && !*stash)
         {
             free(stash);
-            free(buffer);
-            return (NULL);
-        }
-        else if(bytes_read == 0)
-            break;
-        else
-        {
-            if (bytes_read < BUFFER_SIZE)
-                found_EOF = 1;
-            stash[bytes_read] = '\0';
-            buffer = ft_strjoin(buffer, stash);
-            if (ft_strchr(stash, '\n'))
-                found_endline = 1;
+            stash = NULL;
+            *read_failed = 0;
         }
     }
-    free(stash);
-    return (buffer);
+    if (bytes_read == -1)
+    {
+        *read_failed = 1;
+        return (NULL);
+    }
+    return (stash);
 }
 
-char *ft_get_line(char *buffer, size_t *i)
+char *ft_get_line(char *stash, size_t *i)
 {
-    size_t j = 0;
     char *line;
 
-    while(buffer[*i] != '\n' && buffer[*i] != '\0')
+    if (!stash)
+        return (NULL);
+    while(stash[*i] != '\0' && stash[*i] != '\n')
         (*i)++;
-    if(buffer[*i] == '\n')
+    if(stash[*i] == '\n')
         (*i)++;
     line = malloc(*i + 1);
     if (!line)
-        return NULL;
-    while (j < *i)
-    {
-        line[j] = buffer[j];
-        j++;
-    }
-        line[j] = '\0';
+        return (NULL);
+    ft_strlcpy(line, stash, *i + 1);
     return (line);
 }
 
-char *get_next_line(int fd)
+void shift_stash(char **stash, size_t i)
 {
-    static char *buffer; 
-    char *line;
-    size_t i;
-    size_t j;
-    size_t k;
+    char *shifted_stash;
 
-    if(fd < 0 || BUFFER_SIZE <= 0 || read(fd, &line, 0) < 0)
-        return (NULL);
-    buffer = fill_buffer(fd, buffer);
-    if(buffer == NULL)
+    shifted_stash = NULL;
+    if (*stash == NULL)
+        return ;
+    else
     {
-        free(buffer);
-        return (NULL);
+        if (*(*stash + i) != '\0')
+            shifted_stash = ft_strdup(((*stash) + i));
+        free((*stash));
+        (*stash) = shifted_stash;
     }
-    k = ft_strlen(buffer);
-        i = 0;
-        line = ft_get_line(buffer, &i);
-    j = 0;
-    if(i < k)
-    {
-        while (buffer[i])
-            buffer[j++] = buffer[i++];
-    }   
-    buffer[j] = '\0';
-    if (line[0] == '\0')
-    {
-        free(line);
-        return (NULL);
-    }
-    return (line);
 }
 
 
+char    *get_next_line(fd)
+{
+    static char *stash;
+    char *line;
+    char   *h;
+    int read_failed;
+    size_t i;
+
+    read_failed = 0;
+    if (fd < 0 || BUFFER_SIZE < 0)
+        return NULL;
+    if(ft_strchr(stash, '\n') > 0)
+    {
+        i = 0;
+        line = ft_get_line(stash, &i);
+        if (!line)
+            return (free(stash), stash = NULL, NULL);
+        shift_stash(&stash, i);
+        return (line);
+    }
+    h = fill_stash(fd, &read_failed);
+    if (!h && read_failed == 1)
+    {
+        free(stash);
+        stash = NULL;
+        return (NULL);
+    }
+    stash = ft_strjoin(&stash, h);
+    free(h);
+    i = 0;
+    line = ft_get_line(stash, &i);
+    if (!line)
+        return (free(stash), stash = NULL, NULL);
+    shift_stash(&stash, i);
+    return (line);
+}
 
 // int main()
 // {
 //     char *str;
 //     int fd = open("text.txt", O_RDONLY);
-// //    char *buffer;
 //     int i = 0;
-//     // while(i < 12)
+//     str= get_next_line(fd);
+//     printf("%s" , str);
+//     free(str);
+//     str= get_next_line(fd);
+//     printf("%s" , str);
+//     free(str);
+//     str= get_next_line(fd);
+//     printf("%s" , str);
+//     free(str);
+//     str= get_next_line(fd);
+//     printf("%s" , str);
+//     free(str);
+//     str= get_next_line(fd);
+//     printf("%s" , str);
+//     free(str);
+//     str= get_next_line(fd);
+//     printf("%s" , str);
+//     free(str);
+//     str= get_next_line(fd);
+//     printf("%s" , str);
+//     free(str);
+//     str= get_next_line(fd);
+//     printf("%s" , str);
+//     free(str);
+//         str= get_next_line(fd);
+//     printf("%s" , str);
+//     free(str);
+//     str= get_next_line(fd);
+//     printf("%s" , str);
+//     free(str);
+//     str= get_next_line(fd);
+//     printf("%s" , str);
+//     free(str);
+//         str= get_next_line(fd);
+//     printf("%s" , str);
+//     free(str);
+//     str= get_next_line(fd);
+//     printf("%s" , str);
+//     free(str);
+//     str= get_next_line(fd);
+//     printf("%s" , str);
+//     free(str);
+//     // system("leaks a.out");
+//     // while(i < 10)
 //     // {
+//     //     // get_next_line(fd);
 //     //     // if(!str)
 //     //     //     break;
-//     //     printf("line : %s\n\n------------------------------------------------------\n\n", str);
-//     //     free(str);
+//     //     printf("line : %s***********************\n\n", get_next_line(fd));
+//     //     // free(str);
 //     //     i++;
 //     // }
-//         system("leaks a.out");
+//     // system("leaks a.out");
 //     // printf("%s\n",get_next_line(fd));
 // }
