@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 20:12:56 by hrochd            #+#    #+#             */
-/*   Updated: 2024/03/26 03:18:34 by hrochd           ###   ########.fr       */
+/*   Updated: 2024/03/26 03:39:53 by hrochd           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*ft_strjoin(char **s1, char *s2)
 {
@@ -103,31 +103,31 @@ void	shift_stash(char **stash, size_t i)
 
 char	*get_next_line(int fd)
 {
-	static char	*stash;
+	static char	*stash[OPEN_MAX];
 	char		*line;
 	char		*h;
 	int			read_failed;
 	size_t		i;
 
 	read_failed = 0;
-	if (fd < 0 || BUFFER_SIZE < 0)
+	if (fd < 0 || fd > OPEN_MAX || BUFFER_SIZE < 0)
 		return (NULL);
-	if (ft_strchr(stash, '\n') > 0)
+	if (ft_strchr(stash[fd], '\n') > 0)
 	{
-		((1) && (i = 0, line = ft_get_line(stash, &i)));
+		((1) && (i = 0, line = ft_get_line(stash[fd], &i)));
 		if (!line)
-			return (free(stash), stash = NULL, NULL);
-		return (shift_stash(&stash, i), line);
+			return (free(stash[fd]), stash[fd] = NULL, NULL);
+		return (shift_stash(&stash[fd], i), line);
 	}
 	h = fill_stash(fd, &read_failed);
 	if (!h && read_failed == 1)
-		return (free(stash), stash = NULL, NULL);
-	stash = ft_strjoin(&stash, h);
+		return (free(stash[fd]), stash[fd] = NULL, NULL);
+	stash[fd] = ft_strjoin(&stash[fd], h);
 	(free(h), i = 0);
-	line = ft_get_line(stash, &i);
+	line = ft_get_line(stash[fd], &i);
 	if (!line)
-		return (free(stash), stash = NULL, NULL);
-	return (shift_stash(&stash, i), line);
+		return (free(stash[fd]), stash[fd] = NULL, NULL);
+	return (shift_stash(&stash[fd], i), line);
 }
 
 // int main()
