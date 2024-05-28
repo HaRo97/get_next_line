@@ -6,7 +6,7 @@
 /*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 20:13:18 by hrochd            #+#    #+#             */
-/*   Updated: 2024/03/26 03:12:33 by hrochd           ###   ########.fr       */
+/*   Updated: 2024/04/19 19:51:00 by hrochd           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,9 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <fcntl.h>
-# include <stdio.h>
 # include <limits.h>
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 1000000
+#  define BUFFER_SIZE 2147483647
 # endif
 
 typedef struct s_info

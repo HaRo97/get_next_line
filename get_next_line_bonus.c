@@ -6,7 +6,7 @@
 /*   By: hrochd <hrochd@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 20:12:56 by hrochd            #+#    #+#             */
-/*   Updated: 2024/03/26 03:39:53 by hrochd           ###   ########.fr       */
+/*   Updated: 2024/04/28 10:21:34 by hrochd           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char	*fill_stash(int fd, int *read_failed)
 	((1) && (f.stash = NULL, f.found_endline = 0, f.bytes_read = 1));
 	while (f.found_endline == 0 && f.bytes_read > 0)
 	{
-		f.buffer = malloc(BUFFER_SIZE + 1);
+		f.buffer = malloc((unsigned int)BUFFER_SIZE + 1);
 		if (!f.buffer)
 			return (free(f.stash), f.stash = NULL, *read_failed = 1, NULL);
 		f.bytes_read = read(fd, f.buffer, BUFFER_SIZE);
@@ -129,64 +129,3 @@ char	*get_next_line(int fd)
 		return (free(stash[fd]), stash[fd] = NULL, NULL);
 	return (shift_stash(&stash[fd], i), line);
 }
-
-// int main()
-// {
-//     char *str;
-//     int fd = open("text.txt", O_RDONLY);
-//     int i = 0;
-//     str= get_next_line(fd);
-//     printf("%s" , str);
-//     free(str);
-//     str= get_next_line(fd);
-//     printf("%s" , str);
-//     free(str);
-//     str= get_next_line(fd);
-//     printf("%s" , str);
-//     free(str);
-//     str= get_next_line(fd);
-//     printf("%s" , str);
-//     free(str);
-//     str= get_next_line(fd);
-//     printf("%s" , str);
-//     free(str);
-//     str= get_next_line(fd);
-//     printf("%s" , str);
-//     free(str);
-//     str= get_next_line(fd);
-//     printf("%s" , str);
-//     free(str);
-//     str= get_next_line(fd);
-//     printf("%s" , str);
-//     free(str);
-//         str= get_next_line(fd);
-//     printf("%s" , str);
-//     free(str);
-//     str= get_next_line(fd);
-//     printf("%s" , str);
-//     free(str);
-//     str= get_next_line(fd);
-//     printf("%s" , str);
-//     free(str);
-//         str= get_next_line(fd);
-//     printf("%s" , str);
-//     free(str);
-//     str= get_next_line(fd);
-//     printf("%s" , str);
-//     free(str);
-//     str= get_next_line(fd);
-//     printf("%s" , str);
-//     free(str);
-//     // system("leaks a.out");
-//     // while(i < 10)
-//     // {
-//     //     // get_next_line(fd);
-//     //     // if(!str)
-//     //     //     break;
-//     //     printf("line : %s***********************\n\n", get_next_line(fd));
-//     //     // free(str);
-//     //     i++;
-//     // }
-//     // system("leaks a.out");
-//     // printf("%s\n",get_next_line(fd));
-// }
