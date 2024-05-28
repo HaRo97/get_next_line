@@ -133,4 +133,3 @@ int main(void)
 ## License
 
 This project is made as part of the 42 School curriculum. Any external use must comply with the rules and licenses of the 42 School.
-```
